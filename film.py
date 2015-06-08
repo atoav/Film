@@ -229,7 +229,7 @@ class Film(Wox):
                     clipboard = readablesize(size)
                     results.append(Result(title, subtitle, clipboard))
 
-            if bitdepthfound and samplingratefound and not found:
+            if bitdepthfound and samplingratefound and not channelsfound:
                 for c in self.channels:
                     bps = khz*1000*bits/8.
                     size = bps*seconds*c[1]
