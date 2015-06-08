@@ -472,7 +472,7 @@ def filterframerate(key, fps=25.0):
 def filtersamplingrate(key, khz=48.):
     # Check for AUDIO Samplingrate (eg. @48k or @44.1Hkz)
     samplingratefound = False
-    resamp = re.compile(r"(\s+)?@?(\s+)?((\d+[\.,](\d+)?)|\d+)(\s+)?(k|khz)", re.IGNORECASE)
+    resamp = re.compile(r"(\s+)?@?(\s+)?((\d+[\.,](\d+)?)|\d+)(\s+)?(k($|\s+)|khz)", re.IGNORECASE)
     if resamp.search(key):
         match = resamp.search(key).group()
         khz = findfloat(match)
