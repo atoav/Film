@@ -1,0 +1,12 @@
+{
+  "ID":"873D51BF1F298E66CE24815CE47911F9",   //Plugin ID，32 bit UUID
+  "ActionKeyword":"film",                     //Plugin default action keyword
+  "Name":"Film",                              //Plugin name
+  "Description":"Film Calculator",    //Plugin description
+  "Author":"atoav",                     //Plugin Author
+  "Version":"1.0.0",                         //Plugin version，must be x.x.x format
+  "Language":"python",                       //Plugin language，we support csharp,python and executable now
+  "Website":"http://www.atoav.com",         //Plugin website or author website
+  "IcoPath": "Images\\pic.png",              //Plugin icon, relative path to the pluign folder
+  "ExecuteFileName":"film.py"   //Execution entry. Dll name for c# plugin, and python file for python plugin
+}
