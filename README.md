@@ -13,7 +13,7 @@ You enter `film 120min` and it will output the timecode and the number of frames
 
 
 #####Default Behaviour
-![Usage](https://github.com/atoav/Film/blob/master/images/1.gif
+![Usage](https://github.com/atoav/Film/blob/master/images/1.gif)
 
 The input value can be in (most inputs are case insensitive and ignore spaces and tenses (you can enter `Minute` and `Minutes`):
 - Frames (`120 f`/`120 Frames`)
