@@ -161,7 +161,7 @@ class Film(Wox):
         # Filter for all usable Statements, return values
         bitratefound, gigps, megps, gbps, mbps, kbps = filterbitrate(key)
         frameratefound, fps = filterframerate(key)
-        samplingratefound, khz = filterchannels(key)
+        samplingratefound, khz = filtersamplingrate(key)
         bitdepthfound, bits = filterbitdepth(key)
         channelsfound, chn = filterchannels(key)
 
@@ -204,7 +204,6 @@ class Film(Wox):
             results.append(Result(title, subtitle, clipboard))
 
         if samplingratefound or bitdepthfound:
-
             # When no bitdepth is set, list all bitdepths for Mono and Stereo
             if not bitdepthfound and not channelsfound:
                 for c in self.channels:
@@ -230,7 +229,7 @@ class Film(Wox):
                     clipboard = readablesize(size)
                     results.append(Result(title, subtitle, clipboard))
 
-            if bitdepthfound and samplingratefound and not channelsfound:
+            if bitdepthfound and samplingratefound and not found:
                 for c in self.channels:
                     bps = khz*1000*bits/8.
                     size = bps*seconds*c[1]
@@ -239,6 +238,38 @@ class Film(Wox):
                     clipboard = readablesize(size)
                     results.append(Result(title, subtitle, clipboard))
 
+            # If Bitrate and Channel is specified
+            if bitdepthfound and channelsfound and not samplingratefound :
+                for smp in self.samplingrates:
+                    bds = smp[1]*1000*bits/8.
+                    size = bds*seconds*chn
+                    if len(smp[0])>8:
+                        spaces = "\t\t"
+                    else:
+                        spaces = "\t\t\t"
+                    title = smp[0]+spaces+"Filesize:\t\t"+readablesize(size)
+                    subtitle = strfloat(bits)+" bit,\tChannels:  "+str(chn)
+                    clipboard = readablesize(size)
+                    results.append(Result(title, subtitle, clipboard))
+
+            # If Samplingrate and Channel is specified
+            if samplingratefound and channelsfound and not bitdepthfound:
+                for bd in self.bitdepths:
+                    bps = khz*1000*bd[1]/8.
+                    size = bps*seconds*chn
+                    if chn == 1:
+                        chnstring = "Mono"
+                    elif chn == 2:
+                        chnstring = "Stereo"
+                    else:
+                        chnstring = str(chn)+" Channels"
+                    title = bd[0]+":\t\t\t"+chnstring+"\t\tFilesize:\t"+readablesize(size)
+                    subtitle = "Samplingrate:\t"+strfloat(khz)+" kHz"
+                    clipboard = readablesize(size)
+                    results.append(Result(title, subtitle, clipboard))
+
+
+            # If everything (Samplingrate, Bitrate, Channels) is specified:
             if bitdepthfound and samplingratefound and channelsfound:
                 bps = khz*1000*bits/8.
                 size = bps*seconds*chn
@@ -258,11 +289,11 @@ class Film(Wox):
         fps = 24.0    
         
         # Check if key matches the film-length (case insensitive)
-        if not re.match(r"^(\s+)?(\d+|\d+[\.,]\d+)(\s+)?(m|meter|meters|ft|feet|foot)($|\s+)", key, re.IGNORECASE):
+        if not re.match(r"^(\s+)?(\d+|\d+[\.,]\d+)(\s+)?(m|meters?|ft|feet|foot)($|\s+)", key, re.IGNORECASE):
             return False
 
         # Check for units and calculate the missing unit
-        if re.match(r"^(\s+)?(\d+|\d+[\.,]\d+)(\s+)?(m|meter|meters)($|\s+)", key, re.IGNORECASE):
+        if re.match(r"^(\s+)?(\d+|\d+[\.,]\d+)(\s+)?(m|meters?)($|\s+)", key, re.IGNORECASE):
             unit = "m"
             meters = findfloat(key)
             feet = meters*3.2808399
@@ -271,11 +302,7 @@ class Film(Wox):
             feet = findfloat(key)
             meters = feet/3.2808399
 
-        # Check for Framerate \s=Spaces
-        refps = re.compile(r"(\s+)?@(\s+)?(\d+|\d+[\.,]\d+)(\s+)?(fps)?", re.IGNORECASE)
-        if refps.search(key):
-            match = refps.search(key).group()
-            fps = findfloat(match)
+        frameratefound, fps = filterframerate(key)
 
         # Output a Result for each Format
         for format in self.formats:
@@ -355,8 +382,8 @@ def filterbitrate(key):
     regbit = "[Gg]bps|[Gg]b(\s+)?/(\s+)?s|[Gg][Bb][Ii][Tt][Ss]?"
     rembit = "[Mm]bps|[Mm]b(\s+)?/(\s+)?s|[Mm][Bb][Ii][Tt][Ss]?"
     rekbit = "[Kk]bps|[Kk]b(\s+)?/(\s+)?s|[Kk][Bb][Ii][Tt][Ss]?"
-    reMB =   "[Mm]Bps|[Mm]B(\s+)?/(\s+)?s"
-    reGB =   "[Gg]Bps|[Gg]B(\s+)?/(\s+)?s"
+    reMB =   "[Mm]Bps|[Mm]B(\s+)?/(\s+)?s|[Mm][Ee][Gg][Aa][Bb][Yy][Tt][Ee][Ss]?"
+    reGB =   "[Gg]Bps|[Gg]B(\s+)?/(\s+)?s|[Gg][Ii][Gg][Aa][Bb][Yy][Tt][Ee][Ss]"
     reMBmin ="[Mm]Bpmin|[Mm]B(\s+)?/(\s+)?min"
     reGBmin ="[Gg]Bpmin|[Gg]B(\s+)?/(\s+)?min"
     rebitrate = re.compile("(\s+)?@?(\s+)?(\d+|\d+[\.,]\d+)(\s+)?("+regbit+"|"+rembit+"|"+rekbit+"|"+reMB+"|"+reGB+"|"+reMBmin+"|"+reGBmin+")")
