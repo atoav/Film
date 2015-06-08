@@ -1,6 +1,6 @@
 # Film
 A Wox Plugin for Film related calculations
-<br><br><br><br>
+<br><br>
 
 ## Usage
 Enter `film` to start the Plugin
