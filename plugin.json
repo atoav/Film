@@ -4,7 +4,7 @@
   "Name":"Film",                              //Plugin name
   "Description":"Film Calculator",    //Plugin description
   "Author":"atoav",                     //Plugin Author
-  "Version":"1.0.0",                         //Plugin version，must be x.x.x format
+  "Version":"0.1.0",                         //Plugin version，must be x.x.x format
   "Language":"python",                       //Plugin language，we support csharp,python and executable now
   "Website":"http://www.atoav.com",         //Plugin website or author website
   "IcoPath": "Images\\pic.png",              //Plugin icon, relative path to the pluign folder
