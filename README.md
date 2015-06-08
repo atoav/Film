@@ -65,3 +65,9 @@ Install the Film Plugin like you would do with any other WOX-Plugin:
 1. Download the Plugin
 2. Create a Directory called ´Film´ in `Wox/Plugins/`
 3. Extract the contents of the downloaded zip into the created Folder `Wox/Plugins/Film
+
+
+## To Do
+- Work in Progress: Space Operations - Enter a Filesize and get a recordinglength for a given Bitrate or Samplingrate (How long can I record with Card X)
+- any suggestions?
+
